@@ -11,6 +11,7 @@ import (
 )
 
 var server = controllers.Server{}
+var currentEnv = os.Getenv("ENVIRONMENT")
 
 func Run() {
 	var err error
@@ -23,21 +24,20 @@ func Run() {
 		fmt.Println("Loading env vars...")
 	}
 
-	var currentEnv = os.Getenv("ENVIRONMENT")
 	if currentEnv != "production" {
-		dbDriver = os.Getenv("DB_DRIVER")
-		dbUser = os.Getenv("DB_USER")
-		dbPassword = os.Getenv("DB_PASSWORD")
-		dbPort = os.Getenv("DB_PORT")
-		dbHost = os.Getenv("DB_HOST")
-		dbName = os.Getenv("DB_NAME")
-	} else {
 		dbDriver = os.Getenv("DEV_DB_DRIVER")
 		dbUser = os.Getenv("DEV_DB_USER")
 		dbPassword = os.Getenv("DEV_DB_PASSWORD")
 		dbPort = os.Getenv("DEV_DB_PORT")
 		dbHost = os.Getenv("DEV_DB_HOST")
 		dbName = os.Getenv("DEV_DB_NAME")
+	} else {
+		dbDriver = os.Getenv("DB_DRIVER")
+		dbUser = os.Getenv("DB_USER")
+		dbPassword = os.Getenv("DB_PASSWORD")
+		dbPort = os.Getenv("DB_PORT")
+		dbHost = os.Getenv("DB_HOST")
+		dbName = os.Getenv("DB_NAME")
 	}
 
 	server.Initialize(dbDriver, dbUser, dbPassword, dbPort, dbHost, dbName)
