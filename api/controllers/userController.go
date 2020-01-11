@@ -73,14 +73,14 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{}
-	user, err := user.GetUserById(server.DB, uint32(uid))
+	userRetrieved, err := user.GetUserById(server.DB, uint32(uid))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, user)
+	responses.JSON(w, http.StatusOK, userRetrieved)
 }
 
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {

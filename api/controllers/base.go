@@ -11,7 +11,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"    //mysql db driver
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres db driver
 
-	"github.com/victorsteven/fullstack/api/models"
+	"github.com/dmdinh22/go-blog/api/models"
 )
 
 type Server struct {
