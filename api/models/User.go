@@ -25,12 +25,12 @@ func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
 
-func VerifyPassword(hashedPassword, passord string) error {
+func VerifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
 func (u *User) BeforeSave() error {
-	hashedPassword, err := Hash(u.password)
+	hashedPassword, err := Hash(u.Password)
 
 	if err != nil {
 		return err
@@ -40,62 +40,70 @@ func (u *User) BeforeSave() error {
 	return nil
 }
 
+func (u *User) Prepare() {
+	u.ID = 0
+	u.Username = html.EscapeString(strings.TrimSpace(u.Username))
+	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = time.Now()
+}
+
 func (u *User) Validate(action string) error {
 	switch strings.ToLower(action) {
 	case "update":
-			if u.username == "" {
-				return errors.New("Required username.")
-			}
+		if u.Username == "" {
+			return errors.New("Required username.")
+		}
 
-			if u.Password == "" {
-				return errors.New("Required Password.")
-			}
+		if u.Password == "" {
+			return errors.New("Required Password.")
+		}
 
-			if u.Email == "" {
-				return errors.New("Required Email.")
-			}
+		if u.Email == "" {
+			return errors.New("Required Email.")
+		}
 
-			if err := checkmail.ValidateFormat(u.Email); err != nil {
-				return errors.New("Invalid Email")
-			}
+		if err := checkmail.ValidateFormat(u.Email); err != nil {
+			return errors.New("Invalid Email")
+		}
 
-			return nil
-	case "login"
-			if u.Password == "" {
-				return errors.New("Required Password.")
-			}
+		return nil
+	case "login":
+		if u.Password == "" {
+			return errors.New("Required Password.")
+		}
 
-			if u.Email == "" {
-				return errors.New("Required Email.")
-			}
+		if u.Email == "" {
+			return errors.New("Required Email.")
+		}
 
-			if err := checkmail.ValidateFormat(u.Email); err != nil {
-				return errors.New("Invalid Email")
-			}
+		if err := checkmail.ValidateFormat(u.Email); err != nil {
+			return errors.New("Invalid Email")
+		}
 
-			return nil
+		return nil
 	default:
-			if u.username == "" {
-				return errors.New("Required username.")
-			}
+		if u.Username == "" {
+			return errors.New("Required username.")
+		}
 
-			if u.Password == "" {
-				return errors.New("Required Password.")
-			}
+		if u.Password == "" {
+			return errors.New("Required Password.")
+		}
 
-			if u.Email == "" {
-				return errors.New("Required Email.")
-			}
+		if u.Email == "" {
+			return errors.New("Required Email.")
+		}
 
-			if err := checkmail.ValidateFormat(u.Email); err != nil {
-				return errors.New("Invalid Email")
-			}
+		if err := checkmail.ValidateFormat(u.Email); err != nil {
+			return errors.New("Invalid Email")
+		}
 
-			return nil
+		return nil
 	}
 }
 
-func (u *User) CreateUser(db *gorm.DB) (*User, error)  {
+func (u *User) CreateUser(db *gorm.DB) (*User, error) {
 	var err error
 	err = db.Debug().Create(&u).Error
 
@@ -103,7 +111,7 @@ func (u *User) CreateUser(db *gorm.DB) (*User, error)  {
 		return &User{}, err
 	}
 
-	return u, nils
+	return u, nil
 }
 
 func (u *User) GetAllUsers(db *gorm.DB) (*[]User, error) {
@@ -132,7 +140,7 @@ func (u *User) GetUserById(db *gorm.DB, uid uint32) (*User, error) {
 	return u, err
 }
 
-func (u *User) UpdateUser(db *gorm.DB, uid uint32) (*User, error)  {
+func (u *User) UpdateUser(db *gorm.DB, uid uint32) (*User, error) {
 	// To hash the password
 	err := u.BeforeSave()
 
@@ -142,10 +150,10 @@ func (u *User) UpdateUser(db *gorm.DB, uid uint32) (*User, error)  {
 
 	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).UpdateColumns(
 		map[string]interface{}{
-			"password":		u.Password,
-			"username":		u.username,
-			"email":			u.Email,
-			"update_at":	time.Now()
+			"password":  u.Password,
+			"username":  u.Username,
+			"email":     u.Email,
+			"update_at": time.Now(),
 		},
 	)
 
@@ -156,12 +164,12 @@ func (u *User) UpdateUser(db *gorm.DB, uid uint32) (*User, error)  {
 	return u, nil
 }
 
-func (u *User) DeleteUser(db *gorm.DB, uid uint32) (int64, error)  {
+func (u *User) DeleteUser(db *gorm.DB, uid uint32) (int64, error) {
 	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Delete(&User{})
 
 	if db.Error != nil {
 		return 0, db.Error
 	}
 
-	return db.Rowsaffected, nil
+	return db.RowsAffected, nil
 }

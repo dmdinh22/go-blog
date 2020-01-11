@@ -39,7 +39,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid, err := auth.ExtractTokenID(r)
+	uid, err := auth.ExtractTokenId(r)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -51,7 +51,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	createdPost, err := post.SavePost(server.DB)
+	createdPost, err := post.CreatePost(server.DB)
 
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -66,7 +66,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 	post := models.Post{}
-	posts, err := post.FindAllPosts(server.DB)
+	posts, err := post.GetAllPosts(server.DB)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
@@ -87,7 +87,7 @@ func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 
 	post := models.Post{}
 
-	postRetrieved, err := post.FindPostByID(server.DB, pid)
+	postRetrieved, err := post.GetPostByID(server.DB, pid)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
@@ -109,7 +109,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if auth token valid & get the userId
-	uid, err := auth.ExtractTokenID(r)
+	uid, err := auth.ExtractTokenId(r)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
@@ -187,7 +187,7 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if user authenticated?
-	uid, err := auth.ExtractTokenID(r)
+	uid, err := auth.ExtractTokenId(r)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
