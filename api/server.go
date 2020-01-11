@@ -11,12 +11,12 @@ import (
 )
 
 var server = controllers.Server{}
-var currentEnv = os.Getenv("ENVIRONMENT")
 
 func Run() {
 	var err error
 	err = godotenv.Load()
 	var dbDriver, dbUser, dbPassword, dbPort, dbHost, dbName string
+	var currentEnv = os.Getenv("ENVIRONMENT")
 
 	if err != nil {
 		log.Fatalf("Error getting env vars", err)
