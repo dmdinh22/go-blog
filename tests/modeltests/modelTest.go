@@ -146,7 +146,7 @@ func seedOneUserAndOnePost() (models.Post, error) {
 	user := models.User{
 		Username: "Sam Phil",
 		Email:    "sam@mailinator.com",
-		Password: "password",
+		Password: "p@$$w0rd",
 	}
 
 	err = server.DB.Model(&models.User{}).Create(&user).Error
@@ -181,12 +181,12 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 		models.User{
 			Username: "Steven victor",
 			Email:    "steven@mailinator.com",
-			Password: "password",
+			Password: "p@$$w0rd",
 		},
 		models.User{
 			Username: "Magu Frank",
 			Email:    "magu@mailinator.com",
-			Password: "password",
+			Password: "p@$$w0rd",
 		},
 	}
 
