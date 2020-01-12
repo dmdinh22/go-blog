@@ -9,6 +9,10 @@
 - Gorilla Mux (For HTTP routing and URL matcher)
 
 
-### Running Tests
+### Running Test Suite
+- `cd test`
+- `go test -v ./...`
+
+### Running Tests for a Module
 - `cd test/$whatever_test_dir_your_test_is_in`
 - `go test -v`
