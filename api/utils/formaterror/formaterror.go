@@ -23,5 +23,4 @@ func FormatError(err string) error {
 	}
 
 	return errors.New("Incorrect request body.")
-
 }
