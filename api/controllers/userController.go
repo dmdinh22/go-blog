@@ -43,7 +43,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 
-		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
 

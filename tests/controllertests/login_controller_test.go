@@ -89,7 +89,7 @@ func TestLogin(t *testing.T) {
 		{
 			inputJSON:    `{"email": "kangmail.com", "password": "p@$$w0rd"}`,
 			statusCode:   422,
-			errorMessage: "Invalid Email",
+			errorMessage: "Invalid Email.",
 		},
 		{
 			inputJSON:    `{"email": "", "password": "p@$$w0rd"}`,
