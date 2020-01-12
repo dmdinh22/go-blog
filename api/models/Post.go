@@ -102,7 +102,7 @@ func (p *Post) GetPostByID(db *gorm.DB, pid uint64) (*Post, error) {
 	return p, nil
 }
 
-func (p *Post) UpdateAPost(db *gorm.DB) (*Post, error) {
+func (p *Post) UpdatePost(db *gorm.DB) (*Post, error) {
 
 	var err error
 

@@ -164,7 +164,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	//this is important to tell the model the post id to update, the other update field are set above
 	postUpdate.ID = post.ID
-	updatedPost, err := postUpdate.UpdateAPost(server.DB)
+	updatedPost, err := postUpdate.UpdatePost(server.DB)
 
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
