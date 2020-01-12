@@ -108,3 +108,27 @@ func TestUpdatePost(t *testing.T) {
 	assert.Equal(t, updatedPost.Content, postUpdate.Content)
 	assert.Equal(t, updatedPost.AuthorID, postUpdate.AuthorID)
 }
+
+func TestDeletePost(t *testing.T) {
+	err := refreshUserAndPostTable()
+	if err != nil {
+		log.Fatalf("Error refreshing user and post table: %v\n", err)
+	}
+
+	post, err := seedOneUserAndOnePost()
+	if err != nil {
+		log.Fatalf("Error Seeding tables")
+	}
+
+	isDeleted, err := postInstance.DeletePost(server.DB, post.ID, post.AuthorID)
+	if err != nil {
+		t.Errorf("this is the error updating the user: %v\n", err)
+		return
+	}
+
+	//one shows that the record has been deleted or:
+	// assert.Equal(t, int(isDeleted), 1)
+
+	//Can be done this way too
+	assert.Equal(t, isDeleted, int64(1))
+}

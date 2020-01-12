@@ -209,7 +209,7 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = post.DeleteAPost(server.DB, pid, uid)
+	_, err = post.DeletePost(server.DB, pid, uid)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
