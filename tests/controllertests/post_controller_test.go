@@ -362,3 +362,113 @@ func TestUpdatePost(t *testing.T) {
 		}
 	}
 }
+
+func TestDeletePost(t *testing.T) {
+	var PostUserEmail, PostUserPassword string
+	var PostUserID uint32
+	var AuthPostID uint64
+
+	err := refreshUserAndPostTable()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	users, posts, err := seedUsersAndPosts()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//Let's get only the Second user
+	for _, user := range users {
+		if user.ID == 1 {
+			continue
+		}
+		PostUserEmail = user.Email
+		PostUserPassword = "p@$$w0rd" //unhashed pw
+	}
+
+	//Login the user and get the authentication token
+	token, err := server.SignIn(PostUserEmail, PostUserPassword)
+	if err != nil {
+		log.Fatalf("cannot login: %v\n", err)
+	}
+	tokenString := fmt.Sprintf("Bearer %v", token)
+
+	// Get only the second post
+	for _, post := range posts {
+		if post.ID == 1 {
+			continue
+		}
+		AuthPostID = post.ID
+		PostUserID = post.AuthorID
+	}
+
+	postSample := []struct {
+		id           string
+		authorId     uint32
+		tokenGiven   string
+		statusCode   int
+		errorMessage string
+	}{
+		{
+			// Convert int64 to int first before converting to string
+			id:           strconv.Itoa(int(AuthPostID)),
+			authorId:     PostUserID,
+			tokenGiven:   tokenString,
+			statusCode:   204,
+			errorMessage: "",
+		},
+		{
+			// When empty token is passed
+			id:           strconv.Itoa(int(AuthPostID)),
+			authorId:     PostUserID,
+			tokenGiven:   "",
+			statusCode:   401,
+			errorMessage: "Unauthorized",
+		},
+		{
+			// When incorrect token is passed
+			id:           strconv.Itoa(int(AuthPostID)),
+			authorId:     PostUserID,
+			tokenGiven:   "This is an incorrect token",
+			statusCode:   401,
+			errorMessage: "Unauthorized",
+		},
+		{
+			id:         "unknwon",
+			tokenGiven: tokenString,
+			statusCode: 400,
+		},
+		{
+			id:           strconv.Itoa(int(1)),
+			authorId:     1,
+			statusCode:   401,
+			errorMessage: "Unauthorized",
+		},
+	}
+
+	for _, v := range postSample {
+		req, _ := http.NewRequest("GET", "/posts", nil)
+		req = mux.SetURLVars(req, map[string]string{"id": v.id})
+
+		rr := httptest.NewRecorder()
+		handler := http.HandlerFunc(server.DeletePost)
+
+		req.Header.Set("Authorization", v.tokenGiven)
+
+		handler.ServeHTTP(rr, req)
+
+		assert.Equal(t, rr.Code, v.statusCode)
+
+		if v.statusCode == 401 && v.errorMessage != "" {
+			responseMap := make(map[string]interface{})
+
+			err = json.Unmarshal([]byte(rr.Body.String()), &responseMap)
+			if err != nil {
+				t.Errorf("Cannot convert to json: %v", err)
+			}
+
+			assert.Equal(t, responseMap["error"], v.errorMessage)
+		}
+	}
+}
