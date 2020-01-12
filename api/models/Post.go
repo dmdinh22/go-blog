@@ -14,9 +14,9 @@ type Post struct {
 	Title     string    `gorm:"size:255;not null;unique" 		json:"title"`
 	Content   string    `gorm:"size:255;not null;" 					json:"content"`
 	Author    User      `																		json:"author"`
-	AuthorID  uint32    `gorm:"not null" json:"author_id"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" 	json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" 	json:"updated_at"`
+	AuthorID  uint32    `gorm:"not null" 										json:"authorId"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" 	json:"createdAt"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" 	json:"updatedAt"`
 }
 
 func (p *Post) Prepare() {
