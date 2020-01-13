@@ -3,3 +3,4 @@
 .idea
 __debug_bin
 kubectl
+mysql-secret.yaml
