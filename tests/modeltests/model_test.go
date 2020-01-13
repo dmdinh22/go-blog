@@ -31,10 +31,10 @@ func TestMain(m *testing.M) {
 func Database() {
 	var err error
 
-	TestDbDriver := os.Getenv("DEV_DB_DRIVER")
+	TestDbDriver := os.Getenv("TEST_DB_DRIVER")
 
 	if TestDbDriver == "mysql" {
-		DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("DEV_DB_USER"), os.Getenv("DEV_DB_PASSWORD"), os.Getenv("DEV_DB_HOST"), os.Getenv("DEV_DB_PORT"), os.Getenv("DEV_DB_NAME"))
+		DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_PORT"), os.Getenv("TEST_DB_NAME"))
 		server.DB, err = gorm.Open(TestDbDriver, DBURL)
 
 		if err != nil {
@@ -46,7 +46,7 @@ func Database() {
 	}
 
 	if TestDbDriver == "postgres" {
-		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", os.Getenv("DEV_DB_HOST"), os.Getenv("DEV_DB_PORT"), os.Getenv("DEV_DB_USER"), os.Getenv("DEV_DB_NAME"), os.Getenv("DEV_DB_PASSWORD"))
+		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_PORT"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_PASSWORD"))
 		server.DB, err = gorm.Open(TestDbDriver, DBURL)
 
 		if err != nil {
