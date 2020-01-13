@@ -7,7 +7,7 @@ metadata:
 spec:
   type: NodePort # Gives each node an external IP that’s accessible from outside the cluster and also opens a Port.
   selector:
-    app: go-blog-api-mysql # Selects any Pod with labels `app=go-blog-mysql`
+    app: go-blog-api-mysql # Selects any Pod with labels `app=go-blog-api-mysql`
   ports:
     - name: http
       port: 8080

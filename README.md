@@ -32,7 +32,7 @@
 #### Running tests
 - from root dir, run `docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit`
 
-## Minikube (Kubernetes)
+## Minikube (Kubernetes) Deployment
 - spin up: `minikube start`
 - spin down: `minikube stop`
 
@@ -41,7 +41,7 @@
 - check secrets were created: `kubectl get secrets`
 - check secret elements: `kubectl describe secrets mysql-secret`
 
-#### Applying yaml commands
+#### Deploying DB to Kubernetes
 - Order: pv, pvc, deployment, service
 ```
 kubectl apply -f mysql-db-pv.yaml
@@ -50,21 +50,22 @@ kubectl apply -f mysql-db-deployment.yaml
 kubectl apply -f mysql-db-service.yaml
 ```
 - view pod after service is spun up: `kubectl get pods`
-- check logs:
+- check logs if there's an error:
 ```
 kubectl describe pod <pod_name>
 kubectl logs <pod_name>
+kubectl logs <pod-name> -c <container-name>
 ```
+- `container-name` comes from `describe` command
 
 ## Pushing API to dockerhub
 - Build image for kubernetes: `docker build -t go-blog-kubernetes .`
 - Tag image to repo on dockerhub: `docker tag <image-name> <dockerhub-username>/<repository-name>:<tag-name>`
   - ie. `docker tag go-blog-kubernetes dmdinh/go-blog:X.X.X`
 
-## Deploying API to Kubernetes
+#### Deploying API to Kubernetes
 - Create and apply kubernetes from the yaml files:
 ```
-kubectl create -f mysql-secret.yaml
 kubectl apply -f api-mysql-deployment.yaml
 kubectl apply -f api-mysql-service.yaml
 ```
