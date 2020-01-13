@@ -32,7 +32,6 @@
 #### Running tests
 - from root dir, run `docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit`
 
-
 ## Minikube (Kubernetes)
 - spin up: `minikube start`
 - spin down: `minikube stop`
@@ -61,3 +60,15 @@ kubectl logs <pod_name>
 - Build image for kubernetes: `docker build -t go-blog-kubernetes .`
 - Tag image to repo on dockerhub: `docker tag <image-name> <dockerhub-username>/<repository-name>:<tag-name>`
   - ie. `docker tag go-blog-kubernetes dmdinh/go-blog:X.X.X`
+
+## Deploying API to Kubernetes
+- Create and apply kubernetes from the yaml files:
+```
+kubectl create -f mysql-secret.yaml
+kubectl apply -f app-mysql-deployment.yaml
+kubectl apply -f app-mysql-service.yaml
+```
+
+- Check pod status: `kubectl get pods`
+- Get services in cluster: `kubectl get services`
+- Get url exposed: `minikube service <service-name> --url` (`minikube service go-blog-mysql --url`)
