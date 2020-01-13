@@ -65,8 +65,8 @@ kubectl logs <pod_name>
 - Create and apply kubernetes from the yaml files:
 ```
 kubectl create -f mysql-secret.yaml
-kubectl apply -f app-mysql-deployment.yaml
-kubectl apply -f app-mysql-service.yaml
+kubectl apply -f api-mysql-deployment.yaml
+kubectl apply -f api-mysql-service.yaml
 ```
 
 - Check pod status: `kubectl get pods`
