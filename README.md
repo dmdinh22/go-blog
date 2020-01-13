@@ -56,3 +56,8 @@ kubectl apply -f mysql-db-service.yaml
 kubectl describe pod <pod_name>
 kubectl logs <pod_name>
 ```
+
+## Pushing API to dockerhub
+- Build image for kubernetes: `docker build -t go-blog-kubernetes .`
+- Tag image to repo on dockerhub: `docker tag <image-name> <dockerhub-username>/<repository-name>:<tag-name>`
+  - ie. `docker tag go-blog-kubernetes dmdinh/go-blog:X.X.X`
