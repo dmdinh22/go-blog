@@ -1,4 +1,5 @@
 # Golang base image
+## Using golang:alpine bc it's much lighter than golang:latest
 FROM golang:alpine as builder
 
 # ENV GO111MODULE=on
