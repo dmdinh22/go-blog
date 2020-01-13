@@ -39,7 +39,7 @@ services:
     depends_on:
       - go-blog-mysql
     environment:
-      - PMA_HOST=mysql # Note the "mysql". Must be the name of the what you used as the mysql service.
+      - PMA_HOST=go-blog-mysql # Note the "mysql". Must be the name of the what you used as the mysql service.
       - PMA_USER=${DB_USER}
       - PMA_PORT=${DB_PORT}
       - PMA_PASSWORD=${DB_PASSWORD}
