@@ -20,6 +20,7 @@
 
 ## Docker
 #### Docker Commands
+- From root dir of app
 - Run: `docker-compose up`
 - Run detached: `docker-compose up -d`
 - Rebuild container: `docker-compose up --build`
