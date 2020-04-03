@@ -8,12 +8,13 @@
 - Mysql
 - Gorilla Mux (For HTTP routing and URL matcher)
 
-
-### Running Test Suite
+### Running Test Suite Locally
+- Make sure API and DB is running locally
 - `cd test`
 - `go test -v ./...`
 
 ### Running Tests for a Module
+- Make sure API and DB is running locally
 - `cd test/$whatever_test_dir_your_test_is_in`
 - `go test -v`
 
