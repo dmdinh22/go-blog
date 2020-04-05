@@ -15,6 +15,19 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// CreateUser godoc
+// @Summary Creates a new user
+// @Description Registers a new user to the DB
+// @Tags users
+// @Param login body models.User false "JSON request body for user"
+// @Param ID query int false "user's id number"
+// @Param Email query string true "user's email"
+// @Param Username query string true "user's username"
+// @Param Password query string true "user's password"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.User
+// @Router /api/users [post]
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
@@ -51,6 +64,14 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, createdUser)
 }
 
+// GetUsers godoc
+// @Summary Get all users
+// @Description Get details of all users
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} models.User
+// @Router /api/users [get]
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	users, err := user.GetAllUsers(server.DB)
@@ -63,6 +84,15 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, users)
 }
 
+// GetUser godoc
+// @Summary Get User By ID
+// @Description Get details of a user by ID
+// @Tags users
+// @Param id path int true "User ID"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.User
+// @Router /api/users/{id} [get]
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
@@ -83,6 +113,16 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userRetrieved)
 }
 
+// Update User godoc
+// @Summary Update User By ID
+// @Description Update details of a user by ID
+// @Tags users
+// @Param id path int true "User ID"
+// @Param user body models.User true "Update Request Body"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.User
+// @Router /api/users/{id} [put]
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
@@ -138,6 +178,15 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
+// Delete User godoc
+// @Summary Delete User By ID
+// @Description Delete details of a user by ID
+// @Tags users
+// @Param id path int true "User ID"
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/users/{id} [delete]
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	user := models.User{}

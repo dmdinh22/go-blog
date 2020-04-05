@@ -12,6 +12,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Login godoc
+// @Summary Logs a user in
+// @Description Authenticate credentials and logs user in
+// @Tags login
+// @Param login body models.Login true "auth token from login"
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string "token"
+// @Router /api/login [post]
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -31,13 +40,17 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	token, err := server.SignIn(user.Email, user.Password)
+	bearerToken, err := server.SignIn(user.Email, user.Password)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
 		return
 	}
-	responses.JSON(w, http.StatusOK, token)
+
+	response := map[string]interface{}{
+		"token": bearerToken,
+	}
+	responses.JSON(w, http.StatusOK, response)
 }
 
 func (server *Server) SignIn(email, password string) (string, error) {

@@ -1,0 +1,321 @@
+basePath: /
+definitions:
+  models.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.Post:
+    properties:
+      author:
+        $ref: '#/definitions/models.User'
+        type: object
+      authorID:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: hello@davidmdinh.com
+    name: API Support
+  description: Blog API written in GoLang
+  license:
+    name: Apache 2.0
+  termsOfService: http://swagger.io/terms/
+  title: Blog API
+  version: "1.0"
+paths:
+  /api:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Main route to check API is running
+      tags:
+      - home
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate credentials and logs user in
+      parameters:
+      - description: auth token from login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/models.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+      summary: Logs a user in
+      tags:
+      - login
+  /api/posts:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Post'
+            type: array
+      summary: Get details of all posts
+      tags:
+      - posts
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post for the user logged in
+      parameters:
+      - description: 'post''s id '
+        in: query
+        name: ID
+        type: integer
+      - description: post's title
+        in: query
+        name: Title
+        required: true
+        type: string
+      - description: post's content
+        in: query
+        name: Content
+        required: true
+        type: string
+      - description: id of user that created this post
+        in: query
+        name: AuthorID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: Creates a new post
+      tags:
+      - posts
+  /api/posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete details of a Post by ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Delete Post By ID
+      tags:
+      - posts
+    get:
+      consumes:
+      - application/json
+      description: Get details of a post by ID
+      parameters:
+      - description: post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: Get post By ID
+      tags:
+      - posts
+    put:
+      consumes:
+      - application/json
+      description: Update details of a Post by ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Request Body
+        in: body
+        name: Post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: Update Post By ID
+      tags:
+      - posts
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user to the DB
+      parameters:
+      - description: JSON request body for user
+        in: body
+        name: login
+        schema:
+          $ref: '#/definitions/models.User'
+      - description: user's id number
+        in: query
+        name: ID
+        type: integer
+      - description: user's email
+        in: query
+        name: Email
+        required: true
+        type: string
+      - description: user's username
+        in: query
+        name: Username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: Password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Creates a new user
+      tags:
+      - users
+  /api/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete details of a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Delete User By ID
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get details of a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get User By ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update details of a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Request Body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Update User By ID
+      tags:
+      - users
+swagger: "2.0"
