@@ -34,6 +34,10 @@
 #### Running tests
 - from root dir, run `docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit`
 
+## Swagger Docs
+- When the environment is running, go to `localhost:8080/swagger/index.html`
+  - `localhost:8080` or `localhost:8080/swagger` in your browser will also redirect to the swagger documentation
+
 ## Minikube (Kubernetes) Deployment
 - spin up: `minikube start`
 - spin down: `minikube stop`

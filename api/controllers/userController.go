@@ -65,7 +65,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetUsers godoc
-// @Summary Get details of all users
+// @Summary Get all users
 // @Description Get details of all users
 // @Tags users
 // @Accept  json
@@ -84,6 +84,15 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, users)
 }
 
+// GetUser godoc
+// @Summary Get User By ID
+// @Description Get details of a user by ID
+// @Tags users
+// @Param id path int true "User ID"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.User
+// @Router /api/users/{id} [get]
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
@@ -104,6 +113,16 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userRetrieved)
 }
 
+// Update User godoc
+// @Summary Update User By ID
+// @Description Update details of a user by ID
+// @Tags users
+// @Param id path int true "User ID"
+// @Param user body models.User true "Update Request Body"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.User
+// @Router /api/users/{id} [put]
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
@@ -159,6 +178,15 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
+// Delete User godoc
+// @Summary Delete User By ID
+// @Description Delete details of a user by ID
+// @Tags users
+// @Param id path int true "User ID"
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/users/{id} [delete]
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	user := models.User{}
