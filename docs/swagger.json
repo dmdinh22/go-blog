@@ -13,7 +13,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost",
+    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
         "/api": {
@@ -21,9 +21,88 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "home"
+                ],
                 "summary": "Main route to check API is running",
                 "responses": {
                     "200": {}
+                }
+            }
+        },
+        "/api/posts": {
+            "get": {
+                "description": "Get details of all posts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Get details of all posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Post"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new post for the user logged in",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Creates a new post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "post's id ",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "post's title",
+                        "name": "Title",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "post's content",
+                        "name": "Content",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of user that created this post",
+                        "name": "AuthorID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Post"
+                        }
+                    }
                 }
             }
         },
@@ -41,7 +120,15 @@
                 ],
                 "summary": "Get details of all users",
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.User"
+                            }
+                        }
+                    }
                 }
             },
             "post": {
@@ -56,6 +143,35 @@
                     "users"
                 ],
                 "summary": "Creates a new user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user's id number",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "user's email",
+                        "name": "Email",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user's username",
+                        "name": "Username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user's password",
+                        "name": "Password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -68,6 +184,33 @@
         }
     },
     "definitions": {
+        "models.Post": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.User"
+                },
+                "authorID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "models.User": {
             "type": "object",
             "properties": {

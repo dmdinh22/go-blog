@@ -1,5 +1,23 @@
 basePath: /
 definitions:
+  models.Post:
+    properties:
+      author:
+        $ref: '#/definitions/models.User'
+        type: object
+      authorID:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   models.User:
     properties:
       createdAt:
@@ -15,7 +33,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost
+host: localhost:8080
 info:
   contact:
     email: hello@davidmdinh.com
@@ -34,6 +52,59 @@ paths:
       responses:
         "200": {}
       summary: Main route to check API is running
+      tags:
+      - home
+  /api/posts:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Post'
+            type: array
+      summary: Get details of all posts
+      tags:
+      - posts
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post for the user logged in
+      parameters:
+      - description: 'post''s id '
+        in: query
+        name: ID
+        type: integer
+      - description: post's title
+        in: query
+        name: Title
+        required: true
+        type: string
+      - description: post's content
+        in: query
+        name: Content
+        required: true
+        type: string
+      - description: id of user that created this post
+        in: query
+        name: AuthorID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: Creates a new post
+      tags:
+      - posts
   /api/users:
     get:
       consumes:
@@ -42,7 +113,12 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
       summary: Get details of all users
       tags:
       - users
@@ -50,6 +126,26 @@ paths:
       consumes:
       - application/json
       description: Registers a new user to the DB
+      parameters:
+      - description: user's id number
+        in: query
+        name: ID
+        type: integer
+      - description: user's email
+        in: query
+        name: Email
+        required: true
+        type: string
+      - description: user's username
+        in: query
+        name: Username
+        required: true
+        type: string
+      - description: user's password
+        in: query
+        name: Password
+        required: true
+        type: string
       produces:
       - application/json
       responses:

@@ -15,6 +15,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// CreatePost godoc
+// @Summary Creates a new post
+// @Description Creates a new post for the user logged in
+// @Tags posts
+// @Param ID query int false "post's id "
+// @Param Title query string true "post's title"
+// @Param Content query string true "post's content"
+// @Param AuthorID query string true "id of user that created this post"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.Post
+// @Router /api/posts [post]
 func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
@@ -64,6 +76,14 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, createdPost)
 }
 
+// GetPosts godoc
+// @Summary Get details of all posts
+// @Description Get details of all posts
+// @Tags posts
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} models.Post
+// @Router /api/posts [get]
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 	post := models.Post{}
 	posts, err := post.GetAllPosts(server.DB)

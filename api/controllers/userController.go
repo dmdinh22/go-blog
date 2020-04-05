@@ -19,6 +19,10 @@ import (
 // @Summary Creates a new user
 // @Description Registers a new user to the DB
 // @Tags users
+// @Param ID query int false "user's id number"
+// @Param Email query string true "user's email"
+// @Param Username query string true "user's username"
+// @Param Password query string true "user's password"
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.User
@@ -65,7 +69,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 // @Tags users
 // @Accept  json
 // @Produce  json
-// @Success 200
+// @Success 200 {array} models.User
 // @Router /api/users [get]
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}

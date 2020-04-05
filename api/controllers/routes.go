@@ -33,7 +33,7 @@ func (s *Server) initializeRoutes() {
 	// Swagger
 	s.Router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 
-	// redirect to swagger
+	// redirect base route to swagger
 	s.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/"+"swagger/", http.StatusSeeOther)
 	})
