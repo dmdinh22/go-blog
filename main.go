@@ -5,7 +5,6 @@
 // @contact.name API Support
 // @contact.email hello@davidmdinh.com
 // @license.name Apache 2.0
-// @host localhost:8080
 // @BasePath /
 package main
 
