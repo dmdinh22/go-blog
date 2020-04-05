@@ -15,6 +15,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// CreateUser godoc
+// @Summary Creates a new user
+// @Description Registers a new user to the DB
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.User
+// @Router /api/users [post]
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
@@ -51,6 +59,14 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, createdUser)
 }
 
+// GetUsers godoc
+// @Summary Get details of all users
+// @Description Get details of all users
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/users [get]
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	users, err := user.GetAllUsers(server.DB)

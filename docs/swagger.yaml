@@ -1,0 +1,63 @@
+basePath: /
+definitions:
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost
+info:
+  contact:
+    email: hello@davidmdinh.com
+    name: API Support
+  description: Blog API written in GoLang
+  license:
+    name: Apache 2.0
+  termsOfService: http://swagger.io/terms/
+  title: Blog API
+  version: "1.0"
+paths:
+  /api:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Main route to check API is running
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all users
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Get details of all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user to the DB
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Creates a new user
+      tags:
+      - users
+swagger: "2.0"

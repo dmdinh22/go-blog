@@ -1,6 +1,13 @@
 package controllers
 
-import "github.com/dmdinh22/go-blog/api/middlewares"
+import (
+	"net/http"
+
+	"github.com/dmdinh22/go-blog/api/middlewares"
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	_ "github.com/dmdinh22/go-blog/docs"
+)
 
 func (s *Server) initializeRoutes() {
 	// Home Route
@@ -22,4 +29,12 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/api/posts/{id}", middlewares.SetMiddlewareJSON(s.GetPost)).Methods("GET")
 	s.Router.HandleFunc("/api/posts/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")
 	s.Router.HandleFunc("/api/posts/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
+
+	// Swagger
+	s.Router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+
+	// redirect to swagger
+	s.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/"+"swagger/", http.StatusSeeOther)
+	})
 }
