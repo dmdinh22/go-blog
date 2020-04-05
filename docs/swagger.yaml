@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  controllers.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   models.Post:
     properties:
       author:
@@ -54,6 +61,28 @@ paths:
       summary: Main route to check API is running
       tags:
       - home
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate credentials and logs user in
+      parameters:
+      - description: auth token from login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+      summary: Logs a user in
+      tags:
+      - login
   /api/posts:
     get:
       consumes:

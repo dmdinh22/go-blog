@@ -12,6 +12,20 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type Login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// Login godoc
+// @Summary Logs a user in
+// @Description Authenticate credentials and logs user in
+// @Tags login
+// @Param login body Login true "auth token from login"
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string "token"
+// @Router /api/login [post]
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

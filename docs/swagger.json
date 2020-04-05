@@ -30,6 +30,40 @@
                 }
             }
         },
+        "/api/login": {
+            "post": {
+                "description": "Authenticate credentials and logs user in",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "Logs a user in",
+                "parameters": [
+                    {
+                        "description": "auth token from login",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/posts": {
             "get": {
                 "description": "Get details of all posts",
@@ -184,6 +218,17 @@
         }
     },
     "definitions": {
+        "controllers.Login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Post": {
             "type": "object",
             "properties": {
