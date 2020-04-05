@@ -71,7 +71,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Lacation", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, createdPost.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, createdPost.ID))
 
 	responses.JSON(w, http.StatusCreated, createdPost)
 }
