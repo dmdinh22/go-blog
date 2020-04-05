@@ -179,6 +179,14 @@
                 "summary": "Creates a new user",
                 "parameters": [
                     {
+                        "description": "JSON request body for user",
+                        "name": "login",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    {
                         "type": "integer",
                         "description": "user's id number",
                         "name": "ID",

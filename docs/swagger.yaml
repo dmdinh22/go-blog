@@ -156,6 +156,11 @@ paths:
       - application/json
       description: Registers a new user to the DB
       parameters:
+      - description: JSON request body for user
+        in: body
+        name: login
+        schema:
+          $ref: '#/definitions/models.User'
       - description: user's id number
         in: query
         name: ID

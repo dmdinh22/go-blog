@@ -19,6 +19,7 @@ import (
 // @Summary Creates a new user
 // @Description Registers a new user to the DB
 // @Tags users
+// @Param login body models.User false "JSON request body for user"
 // @Param ID query int false "user's id number"
 // @Param Email query string true "user's email"
 // @Param Username query string true "user's username"
