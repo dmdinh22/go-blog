@@ -111,7 +111,7 @@
                     },
                     {
                         "description": "Update Request Body",
-                        "name": "Comment",
+                        "name": "Body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -204,7 +204,7 @@
                 "parameters": [
                     {
                         "description": "auth token from login",
-                        "name": "login",
+                        "name": "Body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -351,7 +351,7 @@
                     },
                     {
                         "description": "Update Request Body",
-                        "name": "Post",
+                        "name": "Body",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -434,7 +434,7 @@
                 "parameters": [
                     {
                         "description": "JSON request body for user",
-                        "name": "login",
+                        "name": "Body",
                         "in": "body",
                         "schema": {
                             "$ref": "#/definitions/models.User"
@@ -531,7 +531,7 @@
                     },
                     {
                         "description": "Update Request Body",
-                        "name": "user",
+                        "name": "Body",
                         "in": "body",
                         "required": true,
                         "schema": {

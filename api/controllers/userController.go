@@ -19,7 +19,7 @@ import (
 // @Summary Creates a new user
 // @Description Registers a new user to the DB
 // @Tags users
-// @Param login body models.User false "JSON request body for user"
+// @Param Body body models.User false "JSON request body for user"
 // @Param ID query int false "user's id number"
 // @Param Email query string true "user's email"
 // @Param Username query string true "user's username"
@@ -118,7 +118,7 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 // @Description Update details of a user by ID
 // @Tags users
 // @Param id path int true "User ID"
-// @Param user body models.User true "Update Request Body"
+// @Param Body body models.User true "Update Request Body"
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.User

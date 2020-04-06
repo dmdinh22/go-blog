@@ -169,7 +169,7 @@ func (server *Server) GetComments(w http.ResponseWriter, r *http.Request) {
 // @Description Update details of a Comment by ID
 // @Tags comments
 // @Param id path int true "Comment ID"
-// @Param Comment body models.Comment true "Update Request Body"
+// @Param Body body models.Comment true "Update Request Body"
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Comment

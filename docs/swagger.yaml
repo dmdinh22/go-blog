@@ -148,7 +148,7 @@ paths:
         type: integer
       - description: Update Request Body
         in: body
-        name: Comment
+        name: Body
         required: true
         schema:
           $ref: '#/definitions/models.Comment'
@@ -192,7 +192,7 @@ paths:
       parameters:
       - description: auth token from login
         in: body
-        name: login
+        name: Body
         required: true
         schema:
           $ref: '#/definitions/models.Login'
@@ -307,7 +307,7 @@ paths:
         type: integer
       - description: Update Request Body
         in: body
-        name: Post
+        name: Body
         required: true
         schema:
           $ref: '#/definitions/models.Post'
@@ -345,7 +345,7 @@ paths:
       parameters:
       - description: JSON request body for user
         in: body
-        name: login
+        name: Body
         schema:
           $ref: '#/definitions/models.User'
       - description: user's id number
@@ -427,7 +427,7 @@ paths:
         type: integer
       - description: Update Request Body
         in: body
-        name: user
+        name: Body
         required: true
         schema:
           $ref: '#/definitions/models.User'

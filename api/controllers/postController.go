@@ -131,7 +131,7 @@ func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 // @Description Update details of a Post by ID
 // @Tags posts
 // @Param id path int true "Post ID"
-// @Param Post body models.Post true "Update Request Body"
+// @Param Body body models.Post true "Update Request Body"
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Post
