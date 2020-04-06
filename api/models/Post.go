@@ -134,3 +134,14 @@ func (p *Post) DeletePost(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 
 	return db.RowsAffected, nil
 }
+
+// Delete posts that users have made if they delete their account
+func (p *Post) DeleteUserPosts(db *gorm.DB, uid uint32) (int64, error) {
+	posts := []Post{}
+	db = db.Debug().Model(&Post{}).Where("author_id = ?", uid).Find(&posts).Delete(&posts)
+	if db.Error != nil {
+		return 0, db.Error
+	}
+
+	return db.RowsAffected, nil
+}

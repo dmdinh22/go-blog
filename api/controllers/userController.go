@@ -215,4 +215,26 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+
+	// Also delete the posts, likes and the comments that this user created if any:
+	comment := models.Comment{}
+	post := models.Post{}
+
+	_, err = post.DeleteUserPosts(server.DB, uint32(uid))
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	_, err = comment.DeleteUserComments(server.DB, uint32(uid))
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	response := map[string]interface{}{
+		"token": "User has been deleted",
+	}
+
+	responses.JSON(w, http.StatusOK, response)
 }
