@@ -1,5 +1,23 @@
 basePath: /
 definitions:
+  models.Comment:
+    properties:
+      body:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      postId:
+        type: integer
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+        type: object
+      userId:
+        type: integer
+    type: object
   models.Login:
     properties:
       email:
@@ -40,7 +58,6 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:8080
 info:
   contact:
     email: hello@davidmdinh.com
@@ -61,6 +78,64 @@ paths:
       summary: Main route to check API is running
       tags:
       - home
+  /api/comments:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new comment for the user logged in
+      parameters:
+      - description: 'comment''s id '
+        in: query
+        name: id
+        type: integer
+      - description: comment's user Id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: comment's post Id
+        in: query
+        name: postId
+        required: true
+        type: integer
+      - description: comment's content
+        in: query
+        name: body
+        required: true
+        type: string
+      - description: id of user that created this comment
+        in: query
+        name: AuthorID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      summary: Creates a new comment
+      tags:
+      - comments
+  /api/comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete details of a Comment by ID
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Delete Comment By ID
+      tags:
+      - comments
   /api/login:
     post:
       consumes:

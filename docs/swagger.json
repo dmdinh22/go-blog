@@ -13,7 +13,6 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
         "/api": {
@@ -25,6 +24,92 @@
                     "home"
                 ],
                 "summary": "Main route to check API is running",
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/api/comments": {
+            "post": {
+                "description": "Creates a new comment for the user logged in",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Creates a new comment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "comment's id ",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "comment's user Id",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "comment's post Id",
+                        "name": "postId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "comment's content",
+                        "name": "body",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of user that created this comment",
+                        "name": "AuthorID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Comment"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/{id}": {
+            "delete": {
+                "description": "Delete details of a Comment by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Delete Comment By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Comment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {}
                 }
@@ -418,6 +503,33 @@
         }
     },
     "definitions": {
+        "models.Comment": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "postId": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.User"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Login": {
             "type": "object",
             "properties": {

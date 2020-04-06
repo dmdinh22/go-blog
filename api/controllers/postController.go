@@ -265,5 +265,8 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
-	responses.JSON(w, http.StatusNoContent, "")
+	response := map[string]interface{}{
+		"token": "Post has been deleted",
+	}
+	responses.JSON(w, http.StatusOK, response)
 }

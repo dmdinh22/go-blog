@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/dmdinh22/go-blog/api/auth"
 	"github.com/dmdinh22/go-blog/api/models"
 	"github.com/dmdinh22/go-blog/api/responses"
+	"github.com/gorilla/mux"
 )
 
 // CreateComment godoc
@@ -79,61 +81,53 @@ func (server *Server) CreateComment(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, commentCreated)
 }
 
-// func (server *Server) DeleteComment(w http.ResponseWriter, r *http.Request) {
-// 	commentID := c.Param("id")
-// 	// Is a valid post id given to us?
-// 	cid, err := strconv.ParseUint(commentID, 10, 64)
-// 	if err != nil {
-// 		errList["Invalid_request"] = "Invalid Request"
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"status": http.StatusBadRequest,
-// 			"error":  errList,
-// 		})
-// 		return
-// 	}
-// 	// Is this user authenticated?
-// 	uid, err := auth.ExtractTokenId(c.Request)
-// 	if err != nil {
-// 		errList["Unauthorized"] = "Unauthorized"
-// 		c.JSON(http.StatusUnauthorized, gin.H{
-// 			"status": http.StatusUnauthorized,
-// 			"error":  errList,
-// 		})
-// 		return
-// 	}
-// 	// Check if the comment exist
-// 	comment := models.Comment{}
-// 	err = server.DB.Debug().Model(models.Comment{}).Where("id = ?", cid).Take(&comment).Error
-// 	if err != nil {
-// 		errList["No_post"] = "No Post Found"
-// 		c.JSON(http.StatusNotFound, gin.H{
-// 			"status": http.StatusNotFound,
-// 			"error":  errList,
-// 		})
-// 		return
-// 	}
-// 	// Is the authenticated user, the owner of this post?
-// 	if uid != comment.UserID {
-// 		errList["Unauthorized"] = "Unauthorized"
-// 		c.JSON(http.StatusUnauthorized, gin.H{
-// 			"status": http.StatusUnauthorized,
-// 			"error":  errList,
-// 		})
-// 		return
-// 	}
+// Delete Comment godoc
+// @Summary Delete Comment By ID
+// @Description Delete details of a Comment by ID
+// @Tags comments
+// @Param id path int true "Comment ID"
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/comments/{id} [delete]
+func (server *Server) DeleteComment(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cid, err := strconv.ParseUint(vars["id"], 10, 64)
 
-// 	// If all the conditions are met, delete the post
-// 	_, err = comment.DeleteAComment(server.DB)
-// 	if err != nil {
-// 		errList["Other_error"] = "Please try again later"
-// 		c.JSON(http.StatusNotFound, gin.H{
-// 			"status": http.StatusNotFound,
-// 			"error":  errList,
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"status":   http.StatusOK,
-// 		"response": "Comment deleted",
-// 	})
-// }
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	// Validate user
+	uid, err := auth.ExtractTokenId(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	// Validate existence of comment
+	comment := models.Comment{}
+	err = server.DB.Debug().Model(models.Comment{}).Where("id = ?", cid).Take(&comment).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, err)
+		return
+	}
+
+	// Validate that the comment belongs to this user
+	if uid != comment.UserID {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	_, err = comment.DeleteAComment(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, err)
+		return
+	}
+
+	response := map[string]interface{}{
+		"token": "Comment has been deleted",
+	}
+	responses.JSON(w, http.StatusOK, response)
+}
