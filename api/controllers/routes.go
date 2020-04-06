@@ -32,6 +32,7 @@ func (s *Server) initializeRoutes() {
 
 	//Comment routes
 	s.Router.HandleFunc("/api/comments", middlewares.SetMiddlewareJSON(s.CreateComment)).Methods("POST")
+	s.Router.HandleFunc("/api/comments/{postId}", middlewares.SetMiddlewareJSON(s.GetComments)).Methods("GET")
 	s.Router.HandleFunc("/api/comments/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteComment)).Methods("DELETE")
 
 	// Swagger

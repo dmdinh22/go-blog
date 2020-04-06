@@ -115,6 +115,40 @@
                 }
             }
         },
+        "/api/comments/{postId}": {
+            "get": {
+                "description": "Get details of all comments",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comments"
+                ],
+                "summary": "Get details of all comments",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "post's id comment belongs to",
+                        "name": "postId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Comment"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "description": "Authenticate credentials and logs user in",

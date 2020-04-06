@@ -80,3 +80,22 @@ func (c *Comment) DeleteUserComments(db *gorm.DB, uid uint32) (int64, error) {
 
 	return db.RowsAffected, nil
 }
+
+func (c *Comment) GetComments(db *gorm.DB, pid uint64) (*[]Comment, error) {
+	comments := []Comment{}
+	err := db.Debug().Model(&Comment{}).Where("post_id = ?", pid).Order("created_at desc").Find(&comments).Error
+	if err != nil {
+		return &[]Comment{}, err
+	}
+
+	if len(comments) > 0 {
+		for i, _ := range comments {
+			err := db.Debug().Model(&User{}).Where("id = ?", comments[i].UserID).Take(&comments[i].User).Error
+			if err != nil {
+				return &[]Comment{}, err
+			}
+		}
+	}
+
+	return &comments, err
+}

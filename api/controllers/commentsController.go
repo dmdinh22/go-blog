@@ -131,3 +131,34 @@ func (server *Server) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, response)
 }
+
+// GetComments godoc
+// @Summary Get details of all comments
+// @Description Get details of all comments
+// @Tags comments
+// @Param postId query int false "post's id comment belongs to"
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} models.Comment
+// @Router /api/comments/{postId} [get]
+func (server *Server) GetComments(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	pid, err := strconv.ParseUint(vars["postId"], 10, 64)
+
+	// check post exists
+	post := models.Post{}
+	err = server.DB.Debug().Model(models.Post{}).Where("id = ?", pid).Take(&post).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	comment := models.Comment{}
+	comments, err := comment.GetComments(server.DB, pid)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, comments)
+}

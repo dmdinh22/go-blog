@@ -136,6 +136,28 @@ paths:
       summary: Delete Comment By ID
       tags:
       - comments
+  /api/comments/{postId}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all comments
+      parameters:
+      - description: post's id comment belongs to
+        in: query
+        name: postId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Comment'
+            type: array
+      summary: Get details of all comments
+      tags:
+      - comments
   /api/login:
     post:
       consumes:
