@@ -99,3 +99,20 @@ func (c *Comment) GetComments(db *gorm.DB, pid uint64) (*[]Comment, error) {
 
 	return &comments, err
 }
+
+func (c *Comment) UpdateAComment(db *gorm.DB) (*Comment, error) {
+	var err error
+	err = db.Debug().Model(&Comment{}).Where("id = ?", c.ID).Updates(Comment{Body: c.Body, UpdatedAt: time.Now()}).Error
+	if err != nil {
+		return &Comment{}, err
+	}
+
+	if c.ID != 0 {
+		err = db.Debug().Model(&User{}).Where("id = ?", c.UserID).Take(&c.User).Error
+		if err != nil {
+			return &Comment{}, err
+		}
+	}
+
+	return c, nil
+}

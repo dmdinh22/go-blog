@@ -141,7 +141,6 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	// Check if  postId is valid
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -149,7 +148,6 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	// Check if auth token valid & get the userId
 	uid, err := auth.ExtractTokenId(r)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
@@ -172,7 +170,6 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	// Read the data posted
 	body, err := ioutil.ReadAll(r.Body)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -181,7 +178,6 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	// Start processing the request data
 	postUpdate := models.Post{}
 	err = json.Unmarshal(body, &postUpdate)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -194,15 +190,14 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postUpdate.Prepare()
+	//this is important to tell the model the post id to update, the other update field are set above
+	postUpdate.ID = post.ID
 	err = postUpdate.Validate()
-
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	//this is important to tell the model the post id to update, the other update field are set above
-	postUpdate.ID = post.ID
 	updatedPost, err := postUpdate.UpdatePost(server.DB)
 
 	if err != nil {

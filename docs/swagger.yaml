@@ -136,6 +136,32 @@ paths:
       summary: Delete Comment By ID
       tags:
       - comments
+    put:
+      consumes:
+      - application/json
+      description: Update details of a Comment by ID
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Request Body
+        in: body
+        name: Comment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Comment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comment'
+      summary: Update Comment By ID
+      tags:
+      - comments
   /api/comments/{postId}:
     get:
       consumes:

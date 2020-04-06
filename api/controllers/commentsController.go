@@ -9,6 +9,7 @@ import (
 	"github.com/dmdinh22/go-blog/api/auth"
 	"github.com/dmdinh22/go-blog/api/models"
 	"github.com/dmdinh22/go-blog/api/responses"
+	"github.com/dmdinh22/go-blog/api/utils/formaterror"
 	"github.com/gorilla/mux"
 )
 
@@ -161,4 +162,78 @@ func (server *Server) GetComments(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.JSON(w, http.StatusOK, comments)
+}
+
+// Update Comment godoc
+// @Summary Update Comment By ID
+// @Description Update details of a Comment by ID
+// @Tags comments
+// @Param id path int true "Comment ID"
+// @Param Comment body models.Comment true "Update Request Body"
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.Comment
+// @Router /api/comments/{id} [put]
+func (server *Server) UpdateComment(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cid, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	// validate token and get user Id from token
+	uid, err := auth.ExtractTokenId(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	// validate comment exists
+	origComment := models.Comment{}
+	err = server.DB.Debug().Model(models.Comment{}).Where("id = ?", cid).Take(&origComment).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, err)
+		return
+	}
+
+	if uid != origComment.UserID {
+		responses.ERROR(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	// Read request data
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	// process request data
+	commentUpdate := models.Comment{}
+	err = json.Unmarshal(body, &commentUpdate)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	commentUpdate.Prepare()
+	commentUpdate.ID = origComment.ID
+	commentUpdate.UserID = origComment.UserID
+	commentUpdate.PostID = origComment.PostID
+
+	errorMessages := commentUpdate.Validate()
+	if errorMessages != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	commentUpdated, err := commentUpdate.UpdateAComment(server.DB)
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, commentUpdated)
 }
